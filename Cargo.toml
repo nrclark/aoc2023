@@ -1,0 +1,15 @@
+[package]
+edition = "2021"
+name = "aoc2023"
+version = "0.1.0"
+
+[dependencies]
+
+[[bin]]
+name = "hello-world"
+path = "src/hello-world.rs"
+
+[profile.release]
+debug = false
+opt-level = 2
+strip = true
