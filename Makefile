@@ -1,6 +1,6 @@
 default: build
 
-PROGS := hello-world
+PROGS := day1
 PROJECT_NAME := $(notdir $(subst %/,%,$(abspath .)))
 
 export RUSTFLAGS := -C target-cpu=native
