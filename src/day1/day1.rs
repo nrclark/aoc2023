@@ -1,5 +1,6 @@
 #![warn(clippy::pedantic)]
 
+use once_cell::sync::Lazy;
 use std::collections::HashMap;
 use std::env;
 use std::fs::File;
@@ -14,33 +15,35 @@ fn get_arg(pos: usize) -> Result<String, Error> {
 }
 
 fn find_digits(word: &str) -> Vec<char> {
-    let digit_lookup = HashMap::from([
-        ("one", '1'),
-        ("two", '2'),
-        ("three", '3'),
-        ("four", '4'),
-        ("five", '5'),
-        ("six", '6'),
-        ("seven", '7'),
-        ("eight", '8'),
-        ("nine", '9'),
-        ("1", '1'),
-        ("2", '2'),
-        ("3", '3'),
-        ("4", '4'),
-        ("5", '5'),
-        ("6", '6'),
-        ("7", '7'),
-        ("8", '8'),
-        ("9", '9'),
-    ]);
+    static DIGIT_LOOKUP: Lazy<HashMap<&'static str, char>> = Lazy::new(|| {
+        HashMap::from([
+            ("one", '1'),
+            ("two", '2'),
+            ("three", '3'),
+            ("four", '4'),
+            ("five", '5'),
+            ("six", '6'),
+            ("seven", '7'),
+            ("eight", '8'),
+            ("nine", '9'),
+            ("1", '1'),
+            ("2", '2'),
+            ("3", '3'),
+            ("4", '4'),
+            ("5", '5'),
+            ("6", '6'),
+            ("7", '7'),
+            ("8", '8'),
+            ("9", '9'),
+        ])
+    });
 
     let mut result = Vec::new();
 
     for (i, _) in word.char_indices() {
         let substring = &word[i..];
 
-        for (key, value) in &digit_lookup {
+        for (key, value) in &*DIGIT_LOOKUP {
             if substring.starts_with(key) {
                 result.push(*value);
                 break;
@@ -68,8 +71,8 @@ fn main() -> Result<(), Error> {
 
     let mut sum: u32 = 0;
 
-    for word in data.lines() {
-        let code = find_code(word);
+    for word in data.trim().lines() {
+        let code = find_code(word.trim());
         println!("{word}: {code}");
         sum += code;
     }
